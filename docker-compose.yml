@@ -1,0 +1,37 @@
+services:
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:latest
+    ports:
+      - "9090:9000"
+    networks:
+      - sonarnet
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+
+
+      
+  sonarscanner:
+    image: sonarsource/sonar-scanner-cli
+    networks:
+      - sonarnet
+    environment:
+      - SONAR_HOST_URL=http://sonarqube:9000
+      - SONAR_SCANNER_OPTS=-Dsonar.projectKey=${SONAR_PROJECT_KEY}
+      - SONAR_TOKEN=${SONAR_TOKEN}
+    volumes:
+      - ./:/usr/src
+    depends_on:
+      - sonarqube
+
+networks:
+  sonarnet:
+    driver: bridge
+
+volumes:
+  sonarqube_data: {}
+  sonarqube_extensions: {}
+  sonarqube_logs: {}
+  postgresql_data: {}
