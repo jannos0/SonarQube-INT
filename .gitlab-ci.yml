@@ -1,0 +1,14 @@
+#######################################
+# Check the project code quality with Sonar, make sure your Gitlab project has a secret variable (project -> settings -> CI/CD) defined called SONAR_TOKEN
+#######################################
+codequality_preview:
+  stage: qa
+  script:
+    - sonar-scanner -Dsonar.host.url=https://sonarqube.example.com -Dsonar.analysis.mode=preview -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME -Dsonar.projectVersion=$CI_JOB_ID -Dsonar.branch=$CI_COMMIT_REF_NAME -Dsonar.gitlab.project_id=$CI_PROJECT_URL
+
+#######################################
+# Check the project code quality with Sonar, make sure your Gitlab project has a secret variable (project -> settings -> CI/CD) defined called SONAR_TOKEN
+#######################################
+codequality:
+  stage: qa
+  script:
